@@ -1,0 +1,190 @@
+{
+	"info": {
+		"_postman_id": "8aea28b3-97a8-441b-8539-c705c067fa0a",
+		"name": "library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/authors/?name=Fulano",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/api/authors/?name=David Beazley",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"authors",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "David Beazley"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/books/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"name\": \"Book\",\n            \"edition\": 1,\n            \"publication_year\": \"2019\",\n            \"authors\": [21]\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/books/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"books",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/books/id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n            \"name\": \"Book\",\n            \"edition\": 1,\n            \"publication_year\": \"2019\",\n            \"authors\": [26]\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/books/5/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"books",
+						"5",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/books/",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/books/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"books",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/books/id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/books/5/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"books",
+						"5",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/books/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/books/5/",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"books",
+						"5",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
