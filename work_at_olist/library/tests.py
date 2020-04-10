@@ -146,3 +146,17 @@ class BookTests(APITestCase):
         self.assertEqual(response_body['edition'], 2)
         self.assertEqual(response_body['publication_year'], "2020")
         self.assertEqual(response_body['authors'], [1])
+
+    def test_delete_book(self):
+        """
+        Checks deleting Book using the DELETE /book/id endpoint
+        """
+
+        self.client.post(self.url_list, data=self.request_body, format='json')
+        books = Book.objects.all()
+        self.assertEqual(books.count(), 1)
+        response = self.client.delete(self.url_detail)
+        status_code = response.status_code
+        books = Book.objects.all()
+        self.assertEqual(status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(books.count(), 0)
