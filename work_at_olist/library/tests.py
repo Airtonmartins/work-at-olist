@@ -1,8 +1,12 @@
 from io import StringIO
 from django.core.management import call_command
 from django.core.management.base import CommandError
+from rest_framework import status
 from django.test import TestCase
+from django.urls import reverse
 
+
+from rest_framework.test import APITestCase
 from library.models import Author
 
 class ImportAuthorsTest(TestCase):
@@ -33,5 +37,41 @@ class ImportAuthorsTest(TestCase):
             call_command('import_authors', 'books.csv', stdout=out)
         
     
+class AuthorTests(APITestCase):
 
-        
+        def setUp(self):
+            Author.objects.create(name="Neris")
+
+        def test_list_authors(self):
+            """
+            Checks basic functioning of the GET /authors endpoint
+            """
+
+            url = reverse('authors-list')
+            response = self.client.get(url)
+            status_code = response.status_code
+            response_body = response.data
+            results = response_body['results']
+            self.assertEqual(status_code, status.HTTP_200_OK)
+            self.assertEqual(response_body['count'], 1)
+            self.assertEqual(len(results), 1)
+
+        def test_search_author(self):
+            """
+            Checks basic functioning of the GET /authors?name=author endpoint
+            """
+
+            Author.objects.create(name="Martins")
+            url = reverse('authors-list') + '?name=Neris'
+            response = self.client.get(url)
+            status_code = response.status_code
+            response_body = response.data
+            results = response_body['results']
+            authors = Author.objects.all()
+            self.assertEqual(status_code, status.HTTP_200_OK)
+            self.assertEqual(response_body['count'], 1)
+            self.assertEqual(authors.count(), 2)
+            self.assertEqual(len(results), 1)
+
+
+
