@@ -87,6 +87,7 @@ class BookTests(APITestCase):
             "publication_year": "2019",
             "authors": [1]
         }
+        self.url_detail = reverse('books-detail',  kwargs={'pk':1})
     
     def test_create_book(self):
         """
@@ -101,3 +102,28 @@ class BookTests(APITestCase):
         self.assertEqual(book.edition, 1)
         self.assertEqual(book.publication_year, datetime.date(2019, 1, 1))
         self.assertEqual(book.authors.count(), 1)
+    
+    def test_list_books(self):
+        """
+        Checks basic functioning of the GET /books endpoint
+        """
+        self.client.post(self.url_list, data=self.request_body, format='json')
+        response = self.client.get(self.url_list)
+        status_code = response.status_code
+        response_body = response.data
+        self.assertEqual(status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response_body), 1)
+    
+    def test_get_book(self):
+        """
+        Checks basic functioning of the GET /books/id endpoint
+        """
+        self.client.post(self.url_list, data=self.request_body, format='json')
+        response = self.client.get(self.url_detail)
+        status_code = response.status_code
+        response_body = response.data
+        self.assertEqual(status_code, status.HTTP_200_OK)
+        self.assertEqual(response_body['name'], 'Book')
+        self.assertEqual(response_body['edition'], 1)
+        self.assertEqual(response_body['publication_year'], "2019")
+        self.assertEqual(response_body['authors'], [1])
