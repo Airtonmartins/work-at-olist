@@ -1,3 +1,4 @@
+import datetime
 from io import StringIO
 from django.core.management import call_command
 from django.core.management.base import CommandError
@@ -7,7 +8,8 @@ from django.urls import reverse
 
 
 from rest_framework.test import APITestCase
-from library.models import Author
+from library.models import Author, Book
+
 
 class ImportAuthorsTest(TestCase):
     def test_command_output_success(self):
@@ -74,4 +76,28 @@ class AuthorTests(APITestCase):
             self.assertEqual(len(results), 1)
 
 
+class BookTests(APITestCase):
 
+    def setUp(self):
+        Author.objects.create(name="Neris")
+        self.url_list = reverse('books-list')
+        self.request_body = {
+            "name": "Book",
+            "edition": 1,
+            "publication_year": "2019",
+            "authors": [1]
+        }
+    
+    def test_create_book(self):
+        """
+        Checks creating Book using the POST /book endpoint
+        """
+        response = self.client.post(self.url_list, 
+            data=self.request_body, format='json')
+        status_code = response.status_code
+        book = Book.objects.first()
+        self.assertEqual(status_code, status.HTTP_201_CREATED)
+        self.assertEqual(book.name,"Book")
+        self.assertEqual(book.edition, 1)
+        self.assertEqual(book.publication_year, datetime.date(2019, 1, 1))
+        self.assertEqual(book.authors.count(), 1)

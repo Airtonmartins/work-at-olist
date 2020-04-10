@@ -1,7 +1,9 @@
-from rest_framework import generics
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Author
-from .serializers import AuthorSerializer
+from .models import Author, Book
+from .serializers import AuthorSerializer, BookSerializer
 
 
 class AuthorList(generics.ListAPIView):
@@ -16,3 +18,16 @@ class AuthorList(generics.ListAPIView):
         if name is not None:
             authors = authors.filter(name=name)
         return authors
+
+
+class BookList(APIView):
+    """
+    Create a new Book.
+    """
+
+    def post(self, request, format=None):
+        serializer = BookSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
