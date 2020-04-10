@@ -127,3 +127,22 @@ class BookTests(APITestCase):
         self.assertEqual(response_body['edition'], 1)
         self.assertEqual(response_body['publication_year'], "2019")
         self.assertEqual(response_body['authors'], [1])
+
+    def test_update_book(self):
+        """
+        Checks updating Book using the PUT /books/id endpoint
+        """
+
+        self.client.post(self.url_list, data=self.request_body, format='json')
+        self.request_body['edition'] = 2
+        self.request_body['publication_year'] = '2020'
+        response = self.client.put(self.url_detail, 
+            data=self.request_body, 
+            format='json')
+        status_code = response.status_code
+        response_body = response.data
+        self.assertEqual(status_code, status.HTTP_200_OK)
+        self.assertEqual(response_body['name'], 'Book')
+        self.assertEqual(response_body['edition'], 2)
+        self.assertEqual(response_body['publication_year'], "2020")
+        self.assertEqual(response_body['authors'], [1])
