@@ -4,6 +4,9 @@ import os
 from django.apps import apps
 from django.core.management.base import BaseCommand, CommandError
 
+from library.models import Author
+
+
 class Command(BaseCommand):
     help = "Import the Authors from CSV into the database. " \
         "Insert the CSV name in the arguments"
@@ -22,6 +25,12 @@ class Command(BaseCommand):
     
     def check_headers_incorrect(self, headers):
         return (headers == None or len(headers) != 1)
+
+    def save_author(self, name):
+        try:
+            Author.objects.create(name=name)
+        except Exception as e:
+            raise CommandError("Error in inserting Author: {}".format(str(e)))
     
     def handle(self, *args, **kwargs):
         filename = kwargs['filename'][0]
@@ -38,12 +47,13 @@ class Command(BaseCommand):
                 for row in csv_reader:
                     if row != "":
                         author_name = row[0].strip()
+                        self.save_author(author_name)
                         self.stdout.write(
-                            self.style.SUCCESS('- Author {}'.format(
+                            self.style.SUCCESS('- Author {} saved'.format(
                                 author_name)))
-                        
+
+                self.stdout.write(self.style.SUCCESS('Authors saved successfully'))
 
         except FileNotFoundError:
             raise CommandError("File {} does not exist".format(
                 file_path)) 
-    
